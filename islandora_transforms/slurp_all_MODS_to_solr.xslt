@@ -20,7 +20,7 @@
       <xsl:with-param name="datastream" select="../@ID"/>
     </xsl:apply-templates>
 
-    <!-- Go over everything again, doing some things especially for Berkeley -->
+    <!-- Go over everything again, doing some things specifically for Berekely -->
     <xsl:apply-templates mode="berkeley_slurping_MODS" select="$content/mods:mods"/>
   </xsl:template>
 
@@ -38,18 +38,14 @@
         <xsl:with-param name="datastream" select="$datastream"/>
       </xsl:call-template>
     </xsl:variable>
-
-    <xsl:variable name="qualifier">
-      <xsl:if test="@qualifier">
-        <xsl:value-of select="@qualifier"/>
-      </xsl:if>
-    </xsl:variable>
-
+    
+    <!-- This is like this because Berkeley has more than one dateIssued in their MODS -->
+    <xsl:variable name="qualifier" select="normalize-space(@qualifier)"/>
     <xsl:if test="not(normalize-space($textValue)='')">
       <field>
         <xsl:attribute name="name">
           <xsl:choose>
-            <xsl:when test="not(normalize-space($qualifier)='')">
+            <xsl:when test="not(($qualifier)='')">
               <xsl:value-of select="concat($prefix, local-name(), '_', $qualifier, '_dt')"/>
             </xsl:when>
             <xsl:otherwise>
