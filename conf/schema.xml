@@ -250,6 +250,13 @@
       </analyzer>
     </fieldType>
 
+    <!-- Simple tokenizer to break apart comma-separated values into separate tokens. -->
+    <fieldType name="commaSplitString" class="solr.TextField" sortMissingLast="true" omitNorms="true">
+      <analyzer>
+        <tokenizer class="solr.PatternTokenizerFactory" pattern=",\s*"/>
+      </analyzer>
+    </fieldType>
+
     <!-- since fields of this type are by default not stored or indexed, any data added to 
          them will be ignored outright 
      --> 
@@ -295,6 +302,7 @@
    <dynamicField name="*_i"  type="sint"    indexed="true"  stored="true"/>
    <dynamicField name="*_s"  type="string"  indexed="true"  stored="true"/>
    <dynamicField name="*_ms"  type="string"  indexed="true"  stored="true" multiValued="true"/>
+   <dynamicField name="*_split"  type="commaSplitString"  indexed="true"  stored="true" multiValued="true"/>
    <dynamicField name="*_l"  type="slong"   indexed="true"  stored="true"/>
    <dynamicField name="*_t"  type="text"    indexed="true"  stored="true"/>
    <dynamicField name="*_mt"  type="text"    indexed="true"  stored="true" multiValued="true"/>
@@ -338,6 +346,7 @@
 <copyField source="*_s" dest="*_mlt"/>
 <copyField source="*_s" dest="*_t"/>
 <copyField source="*_ms" dest="*_mt"/>
+<copyField source="spms_all_divisions_ms" dest="spms_all_divisions_split"/>
 
 <!-- The following line is a bit of a performance hog, I would look to remove it if the indexing takes a long time. -->
 <copyField source="*" dest="catch_all_fields_mt"/>
