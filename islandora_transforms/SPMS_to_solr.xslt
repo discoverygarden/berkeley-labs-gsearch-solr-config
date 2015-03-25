@@ -33,10 +33,25 @@
     </xsl:variable>
     <xsl:if test="$empty != ''">
       <field>
-        <xsl:attribute name="name">
-          <xsl:value-of select="concat($prefix, $local, $suffix)"/>
-        </xsl:attribute>
-        <xsl:value-of select="$empty"/>
+          <xsl:choose>
+            <xsl:when test="$local = 'completed_date'">
+              <xsl:variable name="completed_date">
+               <xsl:call-template name="get_ISO8601_date">
+                 <xsl:with-param name="date" select="$empty"/>
+               </xsl:call-template>
+              </xsl:variable>
+              <xsl:attribute name="name">
+                <xsl:value-of select="concat($prefix, $local, '_dt')"/>
+              </xsl:attribute>
+              <xsl:value-of select="$completed_date"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:attribute name="name">
+                <xsl:value-of select="concat($prefix, $local, $suffix)"/>
+              </xsl:attribute>
+              <xsl:value-of select="$empty"/>
+            </xsl:otherwise>
+          </xsl:choose>
       </field>
     </xsl:if>
   </xsl:template>
