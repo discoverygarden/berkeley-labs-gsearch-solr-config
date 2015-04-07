@@ -32,7 +32,6 @@
       <xsl:value-of select="java:toLowerCase(local-name())"/>
     </xsl:variable>
     <xsl:if test="$empty != ''">
-      <field>
           <xsl:choose>
             <xsl:when test="$local = 'completed_date'">
               <xsl:variable name="completed_date">
@@ -40,19 +39,24 @@
                  <xsl:with-param name="date" select="$empty"/>
                </xsl:call-template>
               </xsl:variable>
-              <xsl:attribute name="name">
-                <xsl:value-of select="concat($prefix, $local, '_dt')"/>
-              </xsl:attribute>
-              <xsl:value-of select="$completed_date"/>
+              <xsl:if test="not(normalize-space($completed_date)='')">
+                <field>
+                <xsl:attribute name="name">
+                  <xsl:value-of select="concat($prefix, $local, '_dt')"/>
+                </xsl:attribute>
+                <xsl:value-of select="$completed_date"/>
+                </field>
+              </xsl:if>
             </xsl:when>
             <xsl:otherwise>
+              <field>
               <xsl:attribute name="name">
                 <xsl:value-of select="concat($prefix, $local, $suffix)"/>
               </xsl:attribute>
               <xsl:value-of select="$empty"/>
+              </field>
             </xsl:otherwise>
           </xsl:choose>
-      </field>
     </xsl:if>
   </xsl:template>
 
